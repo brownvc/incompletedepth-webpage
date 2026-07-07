@@ -1,215 +1,149 @@
---- 
+---
 redirect_from: incompletedepth/
 ---
 
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-	
-	<!-- Required meta tags -->
-	<meta http-equiv="Content-Type" content="text/html">
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-	<!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Bootstrap JS with Popper -->
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <title>Are Multi-view Edges Incomplete for Depth Estimation? (IJCV 2024)</title>
 
+  <!-- Brown brand fonts (Minion 3 + Freight Sans), the lab's Adobe Fonts kit. -->
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+  <link rel="stylesheet" href="https://use.typekit.net/diw5pgv.css">
 
-	<style>
-	body {
-		font-family: Georgia, 'Times New Roman', Times, serif;
-	}
+  <!-- Shared BVC project-page styles + JS (bar, logo registry, theme). -->
+  <link rel="stylesheet" href="https://visual.cs.brown.edu/projects/shared/project.css">
+  <script defer src="https://visual.cs.brown.edu/projects/shared/project.js"></script>
 
-	p {
-		text-align: justify;
-		-webkit-hyphens: auto;
-			-moz-hyphens: auto;
-		hyphens: auto;
-	}
+  <style>
+    /* Page-specific: 2x2 teaser grid (RGB reference + estimated depth). */
+    .teaser-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 1.5em 0; }
+    .teaser-grid img { display: block; width: 100%; border-radius: 6px; }
+    .teaser-grid figcaption { grid-column: 1 / -1; }
+  </style>
 
-	a.link-primary {
-  		color: darkred !important;
-  		text-decoration: none;
-	}
-
-	a.link-primary:hover {
-		color: red !important;
-		text-decoration: underline;
-	}
-
-	a.link-primary:active {
-		color:red !important;
-		text-decoration: underline;
-	}
-
-	a.link-primary:visited {
-		color: darkred !important;
-		text-decoration: none;
-	}
-
-	.logo-brown {
-        width: 20em;
-        padding: 1em 1em 1em 1em;
-    }
-
-    .logo-kaist {
-        width: 10em;
-        padding: 1em 1em 1em 1em;
-    }
-	</style>
-
-	
-	<title>Are Multi-view Edges Incomplete for Depth Estimation? (IJCV 2024)</title>
-
+  <!-- Pre-paint theme: apply the stored/OS choice before first render (no
+       flash). Same localStorage 'theme' key + attribute as visual.cs.brown.edu. -->
+  <script>
+    (function () {
+      var t; try { t = localStorage.getItem('theme'); } catch (e) {}
+      var dark = t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
 </head>
 
-<body> 
+<body>
+  <!-- The BVC bar (crest, section links, social icons, theme toggle) is
+       injected by the shared project.js. -->
 
-	<header class="py-5">
-		<div class="container text-center">
-			<h1 class="text">Are Multi-view Edges Incomplete for Depth Estimation?</h1>
-			<h2 class="text-muted">Re-evaluating diffusion-based depth completion through denoising Gaussian splatting.</h2>
-			<h4 class="text-muted">IJCV 2024</h4>
-		</div>
-	</header>
+  <main class="project">
 
-    <div class="container text-center">
-        <div class="row justify-content-md-center">
-            <div class="col-lg-3">
-                <a class="link-primary" href="https://nkhan2.github.io/" target="_blank"  style="text-decoration:none">Numair Khan</a>
-                <br>Brown University
-            </div>
-            <div class="col-lg-3">
-                <a class="link-primary" href="https://vclab.kaist.ac.kr/" target="_blank"  style="text-decoration:none">Min H. Kim</a>
-                <br>KAIST
-            </div>
-            <div class="col-lg-3">
-                <a class="link-primary" href="https://jamestompkin.com/" target="_blank"  style="text-decoration:none">James Tompkin</a>
-                <br>Brown University
-            </div>
-        </div>
+    <h1 class="project-title">
+      Are Multi-view Edges Incomplete for Depth Estimation?
+      <span class="subtitle">Re-evaluating diffusion-based depth completion through denoising Gaussian splatting</span>
+    </h1>
+    <p class="venue">International Journal of Computer Vision (IJCV) 2024</p>
+
+    <div class="authors">
+      <span class="author"><a href="https://nkhan2.github.io/" target="_blank" rel="noopener">Numair Khan</a><sup>1</sup>,</span>
+      <span class="author"><a href="https://vclab.kaist.ac.kr/" target="_blank" rel="noopener">Min H. Kim</a><sup>2</sup>,</span>
+      <span class="author"><a href="https://jamestompkin.com/" target="_blank" rel="noopener">James Tompkin</a><sup>1</sup></span>
     </div>
-	
-	<div class="container w-50">
-    <br><br>
-		<figure class="figure">
-			<img src="./images/teaser_dino_rgb.png" class="figure-img img-fluid rounded" width="49%">
-            <img src="./images/teaser_dino_depth.gif" class="figure-img img-fluid rounded" width="49%">
-            <br>
-            <img src="./images/teaser_lego_rgb.png" class="figure-img img-fluid rounded" width="49%">
-            <img src="./images/teaser_lego_depth.gif" class="figure-img img-fluid rounded" width="49%">
-			<figcaption class="figure-caption">The quality of diffusion-based approaches to fill gaps in depth estimates can be significantly improved by using differentiable rendering to denoise the depth constraint points. This uses no learning from data. Here, we show the improvement on the Dino light field from the HCI dataset and Lego light fields from the Stanford dataset.</figcaption>
-		</figure>
-	</div>
-
-	<br><br>
-	
-  <div class="container w-75">
-		<h3>Abstract</h3>
-		<p>
-			Depth estimation tries to obtain 3D scene geometry from low-dimensional data like 2D images. This is a vital operation in computer vision and any general solution must preserve all depth information of potential relevance to support higher-level tasks. For scenes with well-defined depth, this work shows that multi-view edges can encode all relevant information---that multi-view edges are complete. For this, we follow Elder's complementary work on the completeness of 2D edges for image reconstruction. We deploy an image-space geometric representation: an encoding of multi-view scene edges as constraints and a diffusion reconstruction method for inverting this code into depth maps. Due to inaccurate constraints, diffusion-based methods have previously underperformed against deep learning methods; however, we will reassess the value of diffusion-based methods and show their competitiveness without requiring training data. To begin, we work with structured light fields and Epipolar Plane Images (EPIs). EPIs present high-gradient edges in the angular domain: with correct processing, EPIs provide depth constraints with accurate occlusion boundaries and view consistency. Then, we present a differentiable representation form that allows the constraints and the diffusion reconstruction to be optimized in an unsupervised way via a multi-view reconstruction loss. This is based around point splatting via radiative transport, and extends to unstructured multi-view images. We evaluate our reconstructions for accuracy, occlusion handling, view consistency, and sparsity to show that they retain the geometric information required for higher-level tasks. 
-		</p>
-	</div>
-
-  	<br>
-
-	<div class="container text-center w-50">
-		<figure class="figure">
-			<img src="./images/elder_multiview.png" class="figure-img img-fluid rounded">
-			<figcaption class="figure-caption">
-				<em>Top:</em> Elder showed that a compact edge code could reproduce an image almost exactly, using diffusion as a reconstruction method. <em>Bottom:</em> We show that a compact multi-view edge code can reproduce a depth map almost exactly, too.
-			</figcaption>
-		</figure>
-	</div>
-
-	<div class="container text-center w-75">
-		<figure class="figure">
-			<img src="./images/overview.png" class="figure-img img-fluid rounded">
-			<figcaption class="figure-caption">Diffusion requires accurate point constraints, but these are hard to estimate. We introduce a self-supervised approach using a differentiable Gaussian splat renderer to optimize noisy point constraints.
-			</figcaption>
-		</figure>
-	</div>
-
-	
-	<br><br>
-	<div class="container text-center">
-		<a class="link-primary" href="Khan2024_AreMulti-viewEdgesIncomplete.pdf" target="_self"><img src="./images/paper.png" style="width:200px;border: 1px solid"><br>
-		<a class="link-primary" href="Khan2024_AreMulti-viewEdgesIncomplete.pdf" target="_self">Paper</a>
-	</div>
-
-
-    <br><br>
-    <div class="container w-50">
-        <h3>Presentation</h3>
-        <p>
-        This research was presented as one of the keynote talks in the CVPR 2023 Workshop on Light Fields for Computer Vision (LFNAT).
-        </p>
-        <div style="aspect-ratio: 16 / 10">
-        <iframe src="https://onedrive.live.com/embed?resid=E10E204FB9E6F665%21244301&authkey=!AKDkd7K2jWOJmJ4&em=2" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
-        </div>
+    <div class="affil-logos">
+      <span class="logo-item"><sup>1</sup><span data-logo="brown-cs"></span></span>
+      <span class="logo-item"><sup>2</sup><span data-logo="kaist"></span></span>
     </div>
 
+    <nav class="resource-row">
+      <a href="Khan2024_AreMulti-viewEdgesIncomplete.pdf">Paper</a>
+      <a href="https://doi.org/10.1007/s11263-023-01890-y">DOI</a>
+      <a href="#video">Presentation</a>
+    </nav>
 
-	<br><br>
-	<div class="container w-50">
-		<h3>Citation</h3>
-		<PRE>@article{khan2024incomplete,
-        title={Are Multi-view Edges Incomplete for Depth Estimation?},
-        author={Numair Khan and Min H. Kim and James Tompkin},
-        journal={International Journal on Computer Vision},
-        year={2024},
-		}
-		</PRE>
-	</div>
+    <figure class="teaser-grid">
+      <img src="./images/teaser_dino_rgb.png" alt="Dino light field reference view">
+      <img src="./images/teaser_dino_depth.gif" alt="Estimated depth for the Dino light field">
+      <img src="./images/teaser_lego_rgb.png" alt="Lego light field reference view">
+      <img src="./images/teaser_lego_depth.gif" alt="Estimated depth for the Lego light field">
+      <figcaption>The quality of diffusion-based approaches to fill gaps in depth estimates can be significantly improved by using differentiable rendering to denoise the depth constraint points. This uses no learning from data. Here, we show the improvement on the Dino light field from the HCI dataset and Lego light fields from the Stanford dataset.</figcaption>
+    </figure>
 
-	<br>
+    <section id="abstract-section">
+      <h2 id="abstract">Abstract</h2>
+      <p>
+        Depth estimation tries to obtain 3D scene geometry from low-dimensional data like 2D images. This is a vital operation in computer vision and any general solution must preserve all depth information of potential relevance to support higher-level tasks. For scenes with well-defined depth, this work shows that multi-view edges can encode all relevant information&mdash;that multi-view edges are complete. For this, we follow Elder's complementary work on the completeness of 2D edges for image reconstruction. We deploy an image-space geometric representation: an encoding of multi-view scene edges as constraints and a diffusion reconstruction method for inverting this code into depth maps. Due to inaccurate constraints, diffusion-based methods have previously underperformed against deep learning methods; however, we will reassess the value of diffusion-based methods and show their competitiveness without requiring training data. To begin, we work with structured light fields and Epipolar Plane Images (EPIs). EPIs present high-gradient edges in the angular domain: with correct processing, EPIs provide depth constraints with accurate occlusion boundaries and view consistency. Then, we present a differentiable representation form that allows the constraints and the diffusion reconstruction to be optimized in an unsupervised way via a multi-view reconstruction loss. This is based around point splatting via radiative transport, and extends to unstructured multi-view images. We evaluate our reconstructions for accuracy, occlusion handling, view consistency, and sparsity to show that they retain the geometric information required for higher-level tasks.
+      </p>
+    </section>
 
-	<div class="container w-50">
-	<h3>Related Papers</h3>
-		<p>
-			This IJCV paper is a journal version that brings together and conceptually frames a series of works in depth estimation.
-		</p>
-		<ul>
-			<li>CVPR 2021: <a class="link-primary" href="https://visual.cs.brown.edu/projects/diffdiffdepth-webpage/">Differentiable Diffusion for Depth Estimation from Multi-view Images</a>&mdash;<em>A differentiable Gaussian-based renderer for sparse 3D point sets.</em></li>
-			<li>BMVC 2020: <a class="link-primary" href="https://visual.cs.brown.edu/projects/lightfielddepth-webpage/">Edge-aware Bi-directional Diffusion for Dense Depth Estimation from Light Fields</a>&mdash;<em>Precise 3D point estimation for light fields.</em></li>
-			<li>BMVC 2021: <a class="link-primary" href="https://visual.cs.brown.edu/projects/lightfielddepth-webpage/">View-consistent 4D Light Field Depth Estimation</a>&mdash;<em>Occlusion-aware 3D point estimation for light fields.</em></li>
-		</ul>
-	</div>
+    <section id="method-section">
+      <h2 id="method">Method</h2>
+      <figure>
+        <img src="./images/elder_multiview.png" alt="Edge-code reconstruction: an image reproduced from an edge code, and a depth map reproduced from a multi-view edge code">
+        <figcaption>
+          <em>Top:</em> Elder showed that a compact edge code could reproduce an image almost exactly, using diffusion as a reconstruction method. <em>Bottom:</em> We show that a compact multi-view edge code can reproduce a depth map almost exactly, too.
+        </figcaption>
+      </figure>
+      <figure class="plate">
+        <img src="./images/overview.png" alt="Pipeline: multi-view images and sparse depth labels feed a differentiable diffusion solver, whose dense depth is warped and compared against input views to optimise the point constraints">
+        <figcaption>Diffusion requires accurate point constraints, but these are hard to estimate. We introduce a self-supervised approach using a differentiable Gaussian splat renderer to optimise noisy point constraints.</figcaption>
+      </figure>
+    </section>
 
-	<br>
+    <section id="video-section">
+      <h2 id="video">Presentation</h2>
+      <p>
+        I presented this research as one of the keynote talks in the CVPR 2023 Workshop on Light Fields for Computer Vision (LFNAT).
+      </p>
+      <div class="embed">
+        <iframe src="https://onedrive.live.com/embed?resid=E10E204FB9E6F665%21244301&amp;authkey=!AKDkd7K2jWOJmJ4&amp;em=2"
+                title="Presentation video" frameborder="0" scrolling="no" allowfullscreen></iframe>
+      </div>
+    </section>
 
-	<div class="container w-50">
-	<h3>Acknowledgements</h3>
-		<p>
-			We thank the reviewers for their detailed feedback. James Tompkin thanks NSF CAREER-2144956 and Cognex, Numair Khan thanks an Andy van Dam PhD Fellowship, and Min H. Kim acknowledges the support of Korea NRF grant (2019R1A2C3007229).
-		</p>
-	</div>
+    <section id="citation-section">
+      <h2 id="citation">Citation</h2>
+      <pre class="citation"><code>@article{Khan_2024,
+    author  = {Khan, Numair and Kim, Min H. and Tompkin, James},
+    title   = {Are Multi-view Edges Incomplete for Depth Estimation?},
+    journal = {International Journal of Computer Vision},
+    volume  = {132},
+    number  = {7},
+    pages   = {2639--2673},
+    year    = {2024},
+    doi     = {10.1007/s11263-023-01890-y}
+}</code></pre>
+    </section>
 
-	<div class="container w-75">
-		<div class="row justify-content-md-center">
-            <div class="col-lg-3">
-				<a href="http://visual.cs.brown.edu/"><img src="./images/logos/BrownCSLogo.png" width="100%"></a>
-			</div>
-			<div class="col-lg-3">
-				<img src="./images/logos/KAISTlogo.png" width="50%">
-			</div>
-		</div>
-	</div>
+    <section id="related-section">
+      <h2 id="related">Related Projects</h2>
+      <p>
+        This IJCV paper is a journal version that brings together and conceptually frames a series of works in depth estimation.
+      </p>
+      <ul>
+        <li>CVPR 2021: <a href="https://visual.cs.brown.edu/projects/diffdiffdepth-webpage/">Differentiable Diffusion for Depth Estimation from Multi-view Images</a>&mdash;<em>a differentiable Gaussian-based renderer for sparse 3D point sets.</em></li>
+        <li>BMVC 2020: <a href="https://visual.cs.brown.edu/projects/lightfielddepth-webpage/">Edge-aware Bi-directional Diffusion for Dense Depth Estimation from Light Fields</a>&mdash;<em>precise 3D point estimation for light fields.</em></li>
+        <li>BMVC 2021: <a href="https://visual.cs.brown.edu/projects/lightfielddepth-webpage/">View-consistent 4D Light Field Depth Estimation</a>&mdash;<em>occlusion-aware 3D point estimation for light fields.</em></li>
+      </ul>
+    </section>
 
-  <footer>
-	<br><br>
-    <p class="text-center">
-      Thank you to <a class="link-primary" href="http://getbootstrap.com">Bootstrap</a> for the Webpage design tools.
-    </p>
-  </footer>
+    <section id="acknowledgements-section">
+      <h2 id="acknowledgements">Acknowledgements</h2>
+      <p>
+        We thank the reviewers for their detailed feedback. James Tompkin thanks NSF CAREER-2144956 and Cognex, Numair Khan thanks an Andy van Dam PhD Fellowship, and Min H. Kim acknowledges the support of Korea NRF grant (2019R1A2C3007229).
+      </p>
+    </section>
 
+    <footer class="logos">
+      <span data-logo="brown-cs"></span>
+      <span data-logo="kaist"></span>
+    </footer>
+
+  </main>
 </body>
 
-</HTML>
-
+</html>
